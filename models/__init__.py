@@ -1,0 +1,1 @@
+from .MnistNet import MnistNet
