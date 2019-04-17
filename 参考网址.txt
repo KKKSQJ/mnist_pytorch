@@ -5,3 +5,6 @@ https://github.com/chenyuntc/pytorch-book/tree/master/chapter6-%E5%AE%9E%E6%88%9
 http://www.mamicode.com/info-detail-2517772.html			#pytorch的一些改变及解决方案
 https://blog.csdn.net/u014264373/article/details/85332181   			#pytorch模型加载
 https://pytorch-cn.readthedocs.io/zh/latest/torchvision/torchvision-models/	#pytorch的中文文档
+
+
+asdkfhksdjhf ksd
