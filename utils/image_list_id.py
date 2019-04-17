@@ -8,7 +8,7 @@ def traversPath(rootDir, fileList):
     for root, dirs, files in os.walk(rootDir):
         for file in files:
             #fileList.append(os.path.join(root, file))
-            fileList.append(root+"/"+file)
+            fileList.append(root + os.sep + file)
         for dir in dirs:
             traversPath(dir, fileList)
 
@@ -25,13 +25,15 @@ def shuffle_split(listFile, trainFile, valFile):
         f2.writelines(records[trainNum:])
 
 # 获取图像列表和标签TXT
-def ImageLabelTXT(fileList, imagelabeltxt):
+def ImageLabelTXT(fileList, imagelabeltxt, train=True):
     with open(imagelabeltxt, 'w') as f:
         for line in tqdm(fileList):
             imagepath = line.strip()
-            label = imagepath.split('/')[-2]
-            f.write("{} {}\n".format(imagepath, label))
-            #f.write("{}\n".format(imagepath))
+            label = imagepath.split(os.sep)[-2]
+            if train:
+                f.write("{} {}\n".format(imagepath, label))
+            else:
+                f.write("{}\n".format(imagepath))
 
 
 
