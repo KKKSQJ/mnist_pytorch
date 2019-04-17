@@ -6,6 +6,7 @@ from tqdm import tqdm
 from torchnet import meter
 import argparse
 import models
+import os
 import torch as t
 from utils.image_list_id import ImageLabelTXT
 from utils.image_list_id import traversPath
@@ -60,7 +61,7 @@ def train(args):
 
             train_loss += loss.item()
             pred = t.max(score, 1)[1]  #返回最大值的索引
-            train_correct = (pred == label).sum()
+            train_correct = (pred == target).sum()
             train_acc += train_correct.item()
             print('epoch ', epoch, ' batch ', i)
             i += 1
@@ -79,7 +80,10 @@ def train(args):
             train_data)), train_acc / (len(train_data))))
 
         #model.save()   #每个epoch保存一次
-        prefix = 'checkpoints/' + model.model_name + '_'
+        save_path = 'checkpoints/'
+        if not os.path.exists(save_path):
+            os.mkdir(save_path)
+        prefix = save_path + model.model_name + '_'
         name = prefix + "epoch_" + str(epoch) + ".pth"
         t.save(model.state_dict(), name)
 
@@ -147,12 +151,8 @@ def main():
                         help='choice model to train (default: MnistNet)')
     parser.add_argument('--train_txt_root', type=str, default='./DataList.txt',
                         help='input txt with train data list (default: ./DataList.txt)')
-    parser.add_argument('--test_txt_root', type=str, default='./TestList.txt',
-                        help='input txt with test data list (default: ./TestList.txt)')
     parser.add_argument('--train_batch_size', type=int, default=256, metavar='N',
                         help='input batch size for training (default: 256)')
-    parser.add_argument('--test_batch_size', type=int, default=64, metavar='N',
-                        help='input batch size for testing (default: 64)')
     parser.add_argument('--max_epochs', type=int, default=10, metavar='N',
                         help='number of epochs to train (default: 10)')
     parser.add_argument('--num_workers', type=int, default=4, metavar='N',
@@ -163,11 +163,9 @@ def main():
                         help='learning rate decay (default: 0.5)')
     parser.add_argument('--weight_decay', type=float, default=0e-5, metavar='WEIGHT_DECAY',
                         help='weight decay (default: 0e-5)')
-    parser.add_argument('--use_gpu', action='store_true', default=False,
+    parser.add_argument('--use_gpu', action='store_true', default=True,
                         help='disables CUDA training')
-    parser.add_argument('--result_file', type=str, default='result.csv',
-                        help='result file')
-    parser.add_argument('--load_model_path', type=str, default="checkpoints/mnistNet_epoch_1.pth",
+    parser.add_argument('--load_model_path', type=str, default="",
                         help='The path for loading the current Model (default: "")')
 
     args = parser.parse_args()
@@ -177,9 +175,9 @@ def main():
 
 
 if __name__=='__main__':
-    root = 'F:/proj/mnist/mnist_train/'
+    root = '/home/kingqi/proj/mnist_pytorch/mnist_train'
     fileList = []
     traversPath(root, fileList)
-    ImageLabelTXT(fileList, "DataList.txt")
+    ImageLabelTXT(fileList, "DataList.txt", True)
     main()
 

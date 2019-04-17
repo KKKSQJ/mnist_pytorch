@@ -6,7 +6,8 @@ from tqdm import tqdm
 import argparse
 import models
 import torch as t
-
+from utils.image_list_id import ImageLabelTXT
+from utils.image_list_id import traversPath
 
 
 def write_csv(results, file_name):
@@ -54,7 +55,7 @@ def main():
                         help='input batch size for testing (default: 64)')
     parser.add_argument('--num_workers', type=int, default=4, metavar='N',
                         help='number of workers (default: 4)')
-    parser.add_argument('--use_gpu', action='store_true', default=False,
+    parser.add_argument('--use_gpu', action='store_true', default=True,
                         help='disables CUDA training')
     parser.add_argument('--result_file', type=str, default='result.csv',
                         help='result file')
@@ -70,4 +71,8 @@ def main():
 
 
 if __name__ == '__main__':
+    root = '/home/kingqi/proj/mnist_pytorch/mnist_test'
+    fileList = []
+    traversPath(root, fileList)
+    ImageLabelTXT(fileList, "TestList.txt", False)
     main()
